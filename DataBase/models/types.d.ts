@@ -1,52 +1,53 @@
-export type TIMESTAMP = number
+export interface TableNames {
+  User: 'user'
+  Food: 'food'
+  FoodCategory: 'food_category'
+  Order: 'order'
+  Invoice: 'invoice'
+}
 
-export type UsuarioID = number
-export type ComidaID = number
-export type ComidaCategoriaID = number
-export type PedidoID = number
-export type FacturaID = number
+export type UserID = number
+export type FoodID = number
+export type FoodCategoryID = number
+export type OrderID = number
+export type InvoiceID = number
 
-export interface Usuario {
-  id: UsuarioID
-  nombre: string
-  apellido: string
-  usuarioname: string
+export interface User {
+  id: UserID
+  name: string
+  lastname: string | null
+  username: string
   email: string
   password: string
-  create_time: TIMESTAMP
+  create_time: Date
 }
 
-export interface Comida {
-  id: ComidaID
-  nombre: string
-  descripcion: string
-  precio: number
-  cantidad: number
-  imagen: string
-  categoria_id: ComidaCategoriaID
+export interface Food {
+  id: FoodID
+  name: string
+  description: string
+  price: number
+  stock: number
+  image: string | null
+  food_category_id: FoodCategoryID
 }
 
-export interface ComidaCategoria {
-  id: ComidaCategoriaID
-  nombre: string
-  descripcion: string
+export interface FoodCategory {
+  id: FoodCategoryID
+  name: string
+  description: string
 }
 
-export interface Pedido {
-  id: PedidoID
-  usuario_id: UsuarioID
+export interface Order {
+  id: OrderID
+  user_id: UserID
+  invoice_id: InvoiceID
+  food_id: FoodID
 }
 
-export interface PedidoHasComida {
-  pedido_id: PedidoID
-  comida_id: ComidaID
-}
-
-export interface Factura {
-  id: FacturaID
-  detalles: string
+export interface Invoice {
+  id: InvoiceID
+  details: string | null
   total: number
-  create_time: TIMESTAMP
-  pedido_id: PedidoID
-  usuario_id: UsuarioID
+  create_time: Date
 }

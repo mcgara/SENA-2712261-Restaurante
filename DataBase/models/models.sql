@@ -2,119 +2,104 @@
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema app_restaurante
+-- Schema restaurant_database
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema app_restaurante
+-- Schema restaurant_database
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `app_restaurante` DEFAULT CHARACTER SET utf8 ;
-USE `app_restaurante` ;
+CREATE SCHEMA IF NOT EXISTS `restaurant_database` DEFAULT CHARACTER SET utf8 ;
+USE `restaurant_database` ;
 
 -- -----------------------------------------------------
--- Table `app_restaurante`.`usuario`
+-- Table `restaurant_database`.`user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `app_restaurante`.`usuario` (
-  `id` INT NOT NULL,
-  `nombre` VARCHAR(255) NOT NULL,
-  `apellido` VARCHAR(255) NULL,
+CREATE TABLE IF NOT EXISTS `restaurant_database`.`user` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `lastname` VARCHAR(255) NULL,
   `username` VARCHAR(16) NOT NULL,
-  `email` VARCHAR(255) NULL,
+  `email` VARCHAR(255) NOT NULL,
   `password` VARCHAR(32) NOT NULL,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `username_UNIQUE` (`username` ASC));
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE);
 
 
 -- -----------------------------------------------------
--- Table `app_restaurante`.`comida_categoria`
+-- Table `restaurant_database`.`food_category`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `app_restaurante`.`comida_categoria` (
+CREATE TABLE IF NOT EXISTS `restaurant_database`.`food_category` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(255) NOT NULL,
-  `descripcion` TEXT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `description` TEXT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `nombre_UNIQUE` (`nombre` ASC))
+  UNIQUE INDEX `nombre_UNIQUE` (`name` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `app_restaurante`.`comida`
+-- Table `restaurant_database`.`food`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `app_restaurante`.`comida` (
+CREATE TABLE IF NOT EXISTS `restaurant_database`.`food` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(255) NOT NULL,
-  `descripcion` TEXT NOT NULL,
-  `precio` INT NOT NULL,
-  `cantidad` INT NOT NULL DEFAULT 0,
-  `imagen` TEXT NULL,
-  `categoria_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `categoria_id`),
-  INDEX `fk_comida_comida_categoria1_idx` (`categoria_id` ASC),
-  CONSTRAINT `fk_comida_comida_categoria1`
-    FOREIGN KEY (`categoria_id`)
-    REFERENCES `app_restaurante`.`comida_categoria` (`id`)
+  `name` VARCHAR(255) NOT NULL,
+  `description` TEXT NOT NULL,
+  `price` INT NOT NULL,
+  `stock` INT NOT NULL DEFAULT 0,
+  `image` TEXT NULL,
+  `food_category_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `food_category_id`),
+  INDEX `fk_food_food_category1_idx` (`food_category_id` ASC) VISIBLE,
+  CONSTRAINT `fk_food_food_category1`
+    FOREIGN KEY (`food_category_id`)
+    REFERENCES `restaurant_database`.`food_category` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `app_restaurante`.`pedido`
+-- Table `restaurant_database`.`invoice`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `app_restaurante`.`pedido` (
+CREATE TABLE IF NOT EXISTS `restaurant_database`.`invoice` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `usuario_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `usuario_id`),
-  INDEX `fk_pedido_usuario1_idx` (`usuario_id` ASC),
-  CONSTRAINT `fk_pedido_usuario1`
-    FOREIGN KEY (`usuario_id`)
-    REFERENCES `app_restaurante`.`usuario` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  `details` TEXT NULL,
+  `total` INT NOT NULL DEFAULT 0,
+  `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `app_restaurante`.`pedido_has_comida`
+-- Table `restaurant_database`.`order`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `app_restaurante`.`pedido_has_comida` (
-  `pedido_id` INT NOT NULL,
-  `comida_id` INT NOT NULL,
-  PRIMARY KEY (`pedido_id`, `comida_id`),
-  INDEX `fk_pedido_has_comida_comida1_idx` (`comida_id` ASC),
-  INDEX `fk_pedido_has_comida_pedido_idx` (`pedido_id` ASC),
-  CONSTRAINT `fk_pedido_has_comida_pedido`
-    FOREIGN KEY (`pedido_id`)
-    REFERENCES `app_restaurante`.`pedido` (`id`)
+CREATE TABLE IF NOT EXISTS `restaurant_database`.`order` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `invoice_id` INT NOT NULL,
+  `food_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `user_id`, `invoice_id`, `food_id`),
+  INDEX `fk_order_user_idx` (`user_id` ASC) VISIBLE,
+  INDEX `fk_order_invoice1_idx` (`invoice_id` ASC) VISIBLE,
+  INDEX `fk_order_food1_idx` (`food_id` ASC) VISIBLE,
+  CONSTRAINT `fk_order_user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `restaurant_database`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pedido_has_comida_comida1`
-    FOREIGN KEY (`comida_id`)
-    REFERENCES `app_restaurante`.`comida` (`id`)
+  CONSTRAINT `fk_order_invoice1`
+    FOREIGN KEY (`invoice_id`)
+    REFERENCES `restaurant_database`.`invoice` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `app_restaurante`.`factura`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `app_restaurante`.`factura` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `detalles` TEXT NULL,
-  `total` INT NOT NULL DEFAULT 0,
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-  `pedido_id` INT NOT NULL,
-  `pedido_usuario_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `pedido_id`, `pedido_usuario_id`),
-  INDEX `fk_factura_pedido1_idx` (`pedido_id` ASC, `pedido_usuario_id` ASC),
-  CONSTRAINT `fk_factura_pedido1`
-    FOREIGN KEY (`pedido_id` , `pedido_usuario_id`)
-    REFERENCES `app_restaurante`.`pedido` (`id` , `usuario_id`)
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_order_food1`
+    FOREIGN KEY (`food_id`)
+    REFERENCES `restaurant_database`.`food` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
