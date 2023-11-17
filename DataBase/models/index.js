@@ -1,20 +1,22 @@
-import models from './models.js';
-import UserModel from './User.js';
-import TaskModel from './Task.js';
+import { onceCallback } from '../utils.js';
+import * as models from './models.js';
+import useDefaultConnection from '../connection.js'
+import createUser from './User.js';
 
-export const modelsFile = models.file;
-export const modelsFilePath = models.filePath;
-export const createModelsConnection = models.createConnection;
-export const useModelsConnection = models.useConnection;
+export const modelsFile = models.modelsFile;
+export const modelsFilePath = models.modelsFilePath;
+export const createModelsConnection = models.createModelsConnection;
+export const createUserModel = createUser;
 
-export const useUserModel = UserModel;
-export const useTaskModel = TaskModel;
+export const useModelsConnection = onceCallback(() => createModelsConnection(useDefaultConnection()));
+export const useUserModel = onceCallback(() => createUser(useModelsConnection()))
 
 export default {
-  modelsFile,
-  modelsFilePath,
-  createConnection: models.createConnection,
-  useConnection: models.useConnection,
-  useUser: useUserModel,
-  useTask: useTaskModel
+  file: modelsFile,
+  filePath: modelsFilePath,
+  createConnection: createModelsConnection,
+  createUser,
+  
+  useConnection: useModelsConnection,
+  useUser: useUserModel
 }

@@ -18,6 +18,5 @@ export const useDataBase = onceCallback(async () => {
 
 export default {
   ...models,
-  utils,
-  useDataBase
+  utils
 }
