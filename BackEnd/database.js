@@ -4,11 +4,20 @@ export const useDataBase = useDB
 export const {
   file,
   filePath,
+  utils,
   createConnection,
   createUser,
+  createFood,
+  createFoodCategory,
+  createInvoice,
+  createOrder,
+
   useConnection,
   useUser,
-  utils,
+  useFood,
+  useFoodCategory,
+  useInvoice,
+  useOrder
 } = DB;
 
 export default DB;
