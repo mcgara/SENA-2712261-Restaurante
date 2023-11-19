@@ -1,11 +1,3 @@
-export interface TableNames {
-  User: 'user'
-  Food: 'food'
-  FoodCategory: 'food_category'
-  Order: 'order'
-  Invoice: 'invoice'
-}
-
 export type UserID = number
 export type FoodID = number
 export type FoodCategoryID = number
@@ -51,4 +43,20 @@ export interface Invoice {
   details: string | null
   total: number
   create_time: Date
+}
+
+export interface TableNamesID {
+  'user': UserID
+  'food': FoodID
+  'food_category': FoodCategoryID
+  'order': OrderID
+  'invoice': InvoiceID
+}
+
+export interface TableNames {
+  'user': User
+  'food': Food
+  'food_category': FoodCategory
+  'order': Order
+  'invoice': Invoice
 }
