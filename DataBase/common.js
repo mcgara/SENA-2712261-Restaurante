@@ -36,7 +36,7 @@ export function formatQueryFields(fields, callback, sep) {
 export async function find(connection, tableName, fields) {
   const [arrayFields, arrayValues] = normalizeFields(fields);
   const queryFields = formatQueryFields(arrayFields, field => `\`${field}\` = ?`, ' AND ');
-  const query = `SELECT * FROM \`${tableName}\`` + (arrayFields ? ' WHERE ' + queryFields : '');
+  const query = `SELECT * FROM \`${tableName}\`` + (queryFields ? ' WHERE ' + queryFields : '');
   const [result] = await connection.query(query, arrayValues);
   return result;
 }
