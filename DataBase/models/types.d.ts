@@ -40,13 +40,14 @@ export interface FoodCategory {
 
 export interface Order {
   id: OrderID
-  user_id: UserID
   invoice_id: InvoiceID
   food_id: FoodID
+  stock: number
 }
 
 export interface Invoice {
   id: InvoiceID
+  user_id: UserID
   details: string | null
   total: number
   create_time: Date

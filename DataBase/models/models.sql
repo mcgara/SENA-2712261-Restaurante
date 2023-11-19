@@ -71,7 +71,14 @@ CREATE TABLE IF NOT EXISTS `restaurant_database`.`invoice` (
   `details` TEXT NULL,
   `total` INT NOT NULL DEFAULT 0,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`))
+  `user_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `user_id`),
+  INDEX `fk_invoice_user1_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_invoice_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `restaurant_database`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -80,18 +87,12 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `restaurant_database`.`order` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `user_id` INT NOT NULL,
   `invoice_id` INT NOT NULL,
   `food_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `user_id`, `invoice_id`, `food_id`),
-  INDEX `fk_order_user_idx` (`user_id` ASC) VISIBLE,
+  `stock` INT NOT NULL,
+  PRIMARY KEY (`id`, `invoice_id`, `food_id`),
   INDEX `fk_order_invoice1_idx` (`invoice_id` ASC) VISIBLE,
   INDEX `fk_order_food1_idx` (`food_id` ASC) VISIBLE,
-  CONSTRAINT `fk_order_user`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `restaurant_database`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_order_invoice1`
     FOREIGN KEY (`invoice_id`)
     REFERENCES `restaurant_database`.`invoice` (`id`)
