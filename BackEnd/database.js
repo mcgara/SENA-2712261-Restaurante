@@ -1,10 +1,14 @@
-import DB from '../DataBase/index.js';
+import DB, { useDataBase as useDB } from '../DataBase/index.js';
 
+export const useDataBase = useDB
 export const {
-  useDataBase,
+  file,
+  filePath,
+  createConnection,
+  createUser,
+  useConnection,
+  useUser,
   utils,
-  
-  useUser
 } = DB;
 
 export default DB;
