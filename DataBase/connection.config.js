@@ -2,7 +2,7 @@ import { onceCallback } from './utils.js';
 
 /** @type {import('mysql2').ConnectionConfig} */
 export const defaultConnectionConfig = {
-  database: 'todolist_database',
+  database: 'restaurant_database',
   host: 'localhost',
   port: 3306,
   user: 'root',
