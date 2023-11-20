@@ -1,3 +1,4 @@
+import { onceCallback } from '../utils.js';
 import User from './user.js';
 import Food from './food.js';
 import FoodCategory from './food_category.js';
@@ -10,10 +11,13 @@ export const useFoodCategoryRoute = FoodCategory;
 export const useOrderRoute = Order;
 export const useInvoiceRoute = Invoice;
 
-export default {
-  useUser: useUserRoute,
-  useFood: useFoodRoute,
-  useFoodCategory: useFoodCategoryRoute,
-  useOrder: useOrderRoute,
-  useInvoice: useInvoiceRoute
-}
+/** @type {(app: import('express').Express) => void} */
+export const useAppRoutes = onceCallback(app => {
+  app.use('/user', User());
+  app.use('/food', Food());
+  app.use('/food_category', FoodCategory());
+  app.use('/order', Order());
+  app.use('/invoice', Invoice());
+});
+
+export default useAppRoutes
