@@ -1,16 +1,19 @@
 import { readFile } from 'node:fs/promises';
-import { joinWithRoot, onceCallback, useLogger } from '../utils.js';
+import { joinWithRoot, useLogger } from '../utils.js';
 
-import useDefaultConnection from '../connection.js';
+/**
+ * @typedef {import('../common').Connection} Connection
+ */
 
 const logger = useLogger();
 export const modelsFilePath = joinWithRoot('models/models.sql');
 export const modelsFile = readFile(modelsFilePath, { encoding: 'utf-8' });
 
-/** @param {ReturnType<useDefaultConnection>} connection */
+/** @param {Promise<Connection>} connection */
 export async function createModelsConnection(connection) {
   /** @type {string | null} */
   let script = null;
+
   try {
     script = await modelsFile;
   } catch (err) {
@@ -38,11 +41,4 @@ export async function createModelsConnection(connection) {
 
 /** @typedef {ReturnType<createModelsConnection>} ModelsConnection */
 
-export const useModelsConnection = onceCallback(() => createModelsConnection(useDefaultConnection()));
-
-export default {
-  filePath: modelsFilePath,
-  file: modelsFile,
-  createConnection: createModelsConnection,
-  useConnection: useModelsConnection
-}
+export default createModelsConnection;
