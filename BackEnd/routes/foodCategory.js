@@ -1,27 +1,29 @@
 import { Router } from 'express';
 import { onceCallback } from '../utils.js';
-import { useFoodCategory } from '../database.js';
-
-const foodCategoryRoute = Router();
+import { useFoodCategory as FoodCategory } from '../database.js';
 
 const useFoodCategoryRoute = onceCallback(() => {
-  const FoodCategory = useFoodCategory();
+  const router = Router();
 
-  foodCategoryRoute.get('/', async (req, res) => {
-    res.json(await FoodCategory.find(req.query));
+  router.get('/', async (req, res) => {
+    res.json(await FoodCategory().find(req.query));
   });
 
-  foodCategoryRoute.get('/:id', async (req, res) => {
+  router.get('/:id', async (req, res) => {
     const id = Number(req.params.id);
-    res.json(await FoodCategory.findById(id));
+    let response = await FoodCategory().findById(id);
+    response ?? { message: 'food category not found with id: ' + id, status: 1 };
+    res.json(response);
   });
 
-  foodCategoryRoute.post('/', async (req, res) => {
-    await FoodCategory.create(req.body);
-    res.json({ message: 'successfully created food categories' });
+  router.post('/', async (req, res) => {
+    let response = { message: 'successfully created food categories', status: 0 };
+    try { await FoodCategory().create(req.body); }
+    catch { response = { message: 'error to create food categories', status: 1 } }
+    res.json(response);
   });
 
-  return foodCategoryRoute;
+  return router;
 });
 
 export default useFoodCategoryRoute;

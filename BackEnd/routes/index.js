@@ -1,7 +1,7 @@
 import { onceCallback } from '../utils.js';
 import User from './user.js';
 import Food from './food.js';
-import FoodCategory from './food_category.js';
+import FoodCategory from './foodCategory.js';
 import Order from './order.js';
 import Invoice from './invoice.js';
 

@@ -1,6 +1,6 @@
-import DB, { useDataBase as useDB } from '../DataBase/index.js';
+import database from '../DataBase/index.js';
+import * as defaultDatabase from '../DataBase/default.js';
 
-export const useDataBase = useDB
 export const {
   file,
   filePath,
@@ -11,13 +11,17 @@ export const {
   createFoodCategory,
   createInvoice,
   createOrder,
+  runDataBase
+} = database;
 
+export const {
   useConnection,
-  useUser,
-  useFood,
-  useFoodCategory,
-  useInvoice,
-  useOrder
-} = DB;
-
-export default DB;
+  useConnectionConfig,
+  useModelsConnection,
+  useUserModel,
+  useFoodModel,
+  useFoodCategoryModel,
+  useOrderModel,
+  useInvoiceModel,
+  useDataBase
+} = defaultDatabase;
