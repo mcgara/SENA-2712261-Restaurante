@@ -1,4 +1,4 @@
-import common from './common.js';
+import * as common from './common.js';
 
 /**
  * @typedef {import('./models.js').ModelsConnection} ModelsConnection
