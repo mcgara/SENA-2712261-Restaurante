@@ -1,15 +1,16 @@
 import mysql from 'mysql2/promise.js';
-import useDefaultConnectionConfig from './connection.config.js';
-import { onceCallback, useLogger } from './utils.js';
+import { useLogger } from './utils.js';
 
-const logger = useLogger();
-export const useConnection = onceCallback(() => {
-  const defaultConnection = mysql.createConnection(useDefaultConnectionConfig());
-  defaultConnection.catch(err => {
+/** @param {string | import('./common').ConnectionConfig} config */
+export function createConnection(config) {
+  const logger = useLogger();
+  
+  const connection = mysql.createConnection(config);
+  connection.catch(err => {
     logger.log.error('DATABASE:', err.message ?? 'error create connection in MySQL database.');
-  })
+  });
+  
+  return connection;
+}
 
-  return defaultConnection;
-})
-
-export default useConnection;
+export default createConnection;

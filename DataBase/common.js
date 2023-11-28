@@ -1,5 +1,7 @@
 /**
  * @typedef {import('mysql2/promise').Connection} Connection
+ * @typedef {import('mysql2').ConnectionConfig} ConnectionConfig
+ * @typedef {Awaited<ReturnType<Connection['query']>>} QueryResults
  * @typedef {string | number} FieldType
  */
 
@@ -9,14 +11,7 @@
  * @return {[string[], FieldType[]]}
  */
 export function normalizeFields(fields) {
-  const arrayFields = [];
-  const arrayValues = [];
-
-  for (const [field, value] of Object.entries(fields)) {
-    arrayFields.push(field);
-    arrayValues.push(value);
-  }
-  return [arrayFields, arrayValues];
+  return [Object.keys(fields), Object.values(fields)]
 }
 
 /**
@@ -32,6 +27,7 @@ export function formatQueryFields(fields, callback, sep) {
  * @param {Connection} connection
  * @param {string} tableName
  * @param {FieldsParam} fields
+ * @return {Promise<QueryResults['0']>}
  */
 export async function find(connection, tableName, fields) {
   const [arrayFields, arrayValues] = normalizeFields(fields);
@@ -64,16 +60,17 @@ export async function findById(connection, tableName, id) {
  * @param {Connection} connection
  * @param {string} tableName
  * @param {FieldsParam | FieldsParam[]} fields
+ * @return {Promise<QueryResults>}
  */
 export async function create(connection, tableName, fields) {
   if (!Array.isArray(fields)) fields = [fields];
-  const field = fields[0];
+  const firstFields = fields[0];
   let msgErr = 'param fields must be type a object or array and not empy.';
-  if (!field || typeof field !== 'object') throw TypeError(msgErr);
+  if (!firstFields || typeof firstFields !== 'object') throw TypeError(msgErr);
   
-  const [arrayFields, arrayValues] = normalizeFields(field);
+  const [arrayFields, arrayValues] = normalizeFields(firstFields);
   const [queryFields, queryValues] = [
-    formatQueryFields(arrayFields, field => `\`${field}\``, ','),
+    formatQueryFields(arrayFields, firstFields => `\`${firstFields}\``, ','),
     formatQueryFields(arrayValues, () => '?', ',')
   ];
 
@@ -88,16 +85,16 @@ export async function create(connection, tableName, fields) {
   }
   queryAllValues = queryAllValues.slice(0, -1);
 
+  msgErr = 'error to create in database'
   const query = `INSERT INTO \`${tableName}\`(${queryFields}) VALUES ${queryAllValues}`;
-  const [result] = await connection.query(query, arrayAllValues);
-  return result;
+  return await connection.query(query, arrayAllValues);
 }
 
 /**
  * @param {Connection} connection
  * @param {string} tableName
  */
-export function CommonCreate(connection, tableName) {
+export function Common(connection, tableName) {
   return {
     /** @param {Parameters<find>['2']} fields */
     find: fields => find(connection, tableName, fields),
@@ -113,4 +110,4 @@ export function CommonCreate(connection, tableName) {
   }
 }
 
-export default CommonCreate;
+export default Common;

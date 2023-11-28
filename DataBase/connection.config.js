@@ -1,6 +1,6 @@
-import { onceCallback } from './utils.js';
+/** @typedef {import('./common').ConnectionConfig} ConnectionConfig */
 
-/** @type {import('mysql2').ConnectionConfig} */
+/** @type {ConnectionConfig} */
 export const defaultConnectionConfig = {
   database: 'restaurant_database',
   host: 'localhost',
@@ -10,8 +10,8 @@ export const defaultConnectionConfig = {
   debug: false
 }
 
-const useConnectionConfig = onceCallback(() => {
-  /** @type {import('mysql2').ConnectionConfig} */
+export function createConnectionConfig() {
+  /** @type {ConnectionConfig} */
   let connectionConfigEnv = {
     database: process.env['DB_NAME'],
     host: process.env['DB_HOST'],
@@ -32,7 +32,6 @@ const useConnectionConfig = onceCallback(() => {
   }
 
   return connectionConfig;
-})
+}
 
-
-export default useConnectionConfig;
+export default createConnectionConfig;

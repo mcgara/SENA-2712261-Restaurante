@@ -1,22 +1,23 @@
-import models, { useModelsConnection } from './models/index.js';
-import utils, { onceCallback, useDotenv, useLogger } from './utils.js';
+import models from './models/index.js';
+import utils, { useLogger } from './utils.js';
 
-export const useDataBase = onceCallback(async () => {
-  useDotenv();
+/** @param {import('./common.js').Connection} connection */
+export async function runDataBase (connection) {
   const logger = useLogger();
 
-  const connection = await useModelsConnection();
-  if (connection) {
+  try {
     await connection.connect();
     logger.log.notice('%s', 'DATABASE: successful connection.');
-  } else {
-    logger.log.error('DATABASE: ', 'error CONNECT to database failed.');
+  } catch (err) {
+    logger.log.error('DATABASE: ', 'error CONNECT to database failed.\n\ntraceback: ' + err);
+    throw err; // Exit to service
   }
 
   return connection;
-})
+}
 
 export default {
   ...models,
-  utils
+  utils,
+  runDataBase
 }
