@@ -1,2 +1,1 @@
-export type * from '../../DataBase/models/User'
-export type * from '../../DataBase/models/Task'
+export type * from '../../DataBase/models/types'

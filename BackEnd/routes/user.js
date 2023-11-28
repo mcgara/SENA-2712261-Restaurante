@@ -1,27 +1,29 @@
 import { Router } from 'express';
 import { onceCallback } from '../utils.js';
-import { useUser } from '../database.js';
-
-const userRoute = Router();
+import { useUser as User } from '../database.js';
 
 const useUserRoute = onceCallback(() => {
-  const User = useUser();
+  const router = Router();
 
-  userRoute.get('/', async (req, res) => {
-    res.json(await User.find(req.query)); // TODO: validate req.query to fields of user model
+  router.get('/', async (req, res) => {
+    res.json(await User().find(req.query)); // TODO: validate req.query to fields of user model
   });
 
-  userRoute.get('/:id', async (req, res) => {
+  router.get('/:id', async (req, res) => {
     const id = Number(req.params.id);
-    res.json(await User.findById(id));
+    let response = await User().findById(id);
+    response ?? { message: 'user not found with id: ' + id, status: 1 };
+    res.json(response);
   });
 
-  userRoute.post('/', async (req, res) => {
-    await User.create(req.body); // TODO: validate req.body to fields of user model
-    res.json({ message: 'successfully created users' });
+  router.post('/', async (req, res) => {
+    let response = { message: 'successfully created users', status: 0 };
+    try { await User().create(req.body); } // TODO: validate req.body to fields of user model
+    catch { response = { message: 'error to create users', status: 1 } }
+    res.json(response);
   });
 
-  return userRoute;
+  return router;
 });
 
 export default useUserRoute;

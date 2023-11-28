@@ -1,3 +1,3 @@
-import { useDataBase } from './index.js';
+import { useDataBase } from './default.js';
 
 await useDataBase();

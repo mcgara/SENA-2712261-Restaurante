@@ -1,5 +1,3 @@
-import { onceCallback } from './utils.js';
-
 export const defaultAppConfig = {
   host: 'localhost',
   port: 8010,
@@ -7,7 +5,7 @@ export const defaultAppConfig = {
   backlog: null
 }
 
-const useAppConfig = onceCallback(() => {
+export function createAppConfig() {
   let port = parseInt(process.env['BE_PORT']);
   if (isNaN(port)) port = null;
 
@@ -31,7 +29,9 @@ const useAppConfig = onceCallback(() => {
     ...appConfigEnv
   }
 
-    return appConfig;
-})
+  return appConfig;
+}
 
-export default useAppConfig;
+/** @typedef {ReturnType<createAppConfig>} AppConfig */
+
+export default createAppConfig;

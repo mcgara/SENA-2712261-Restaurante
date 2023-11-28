@@ -1,27 +1,29 @@
 import { Router } from 'express';
 import { onceCallback } from '../utils.js';
-import { useOrder } from '../database.js';
-
-const orderRoute = Router();
+import { useOrder as Order } from '../database.js';
 
 const useOrderRoute = onceCallback(() => {
-  const Order = useOrder();
+  const router = Router();
 
-  orderRoute.get('/', async (req, res) => {
-    res.json(await Order.find(req.query));
+  router.get('/', async (req, res) => {
+    res.json(await Order().find(req.query));
   });
 
-  orderRoute.get('/:id', async (req, res) => {
+  router.get('/:id', async (req, res) => {
     const id = Number(req.params.id);
-    res.json(await Order.findById(id));
+    let response = await Order().findById(id);
+    response ?? { message: 'order not found with id: ' + id, status: 1 };
+    res.json(response);
   });
 
-  orderRoute.post('/', async (req, res) => {
-    await Order.create(req.body);
-    res.json({ message: 'successfully created orders' });
+  router.post('/', async (req, res) => {
+    let response = { message: 'successfully created orders', status: 0 };
+    try { await Order().create(req.body); }
+    catch { response = { message: 'error to create orders', status: 1 } }
+    res.json(response);
   });
 
-  return orderRoute;
+  return router;
 });
 
 export default useOrderRoute;

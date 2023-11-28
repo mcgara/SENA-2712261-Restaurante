@@ -1,3 +1,3 @@
-# DataBase aplication TodoList
+# DataBase aplication Restaurant
 
 ...

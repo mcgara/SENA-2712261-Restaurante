@@ -1,8 +1,6 @@
 import * as common from '../common.js'
 import { useLogger } from '../utils.js';
 
-const logger = useLogger();
-
 /**
  * @typedef {import('./models.js').ModelsConnection} ModelsConnection
  * @typedef {import('./types.js').TableNames} TableNames
@@ -11,24 +9,35 @@ const logger = useLogger();
  */
 
 /**
+ * @template T
+ * @template [U=undefined]
+ * @param {() => Promise<T>} callback
+ * @param {U} [defaultValue]
+ * @param {boolean} throwErr
+ * @return {Promise<T | U>}
+ */
+export async function Execute(callback, defaultValue, throwErr=false) {
+  const logger = useLogger();
+  let value = defaultValue;
+  
+  try {
+    value = await callback();
+  } catch (err) {
+    logger.log.error('DATABASE: ', err.message ?? '\ntraceback: ' + err);
+    if (throwErr) throw err;
+  }
+  return value;
+}
+
+/**
  * @template {AllTableNames} T
  * @param {ModelsConnection} connection
  * @param {T} tableName
  * @param {TableNames[T]} fields
+ * @return {Promise<TableNames[T][]>}
  */
-export async function find(connection, tableName, fields) {
-  const conn = await connection;
-  if (!conn) return null; // TODO: Handle bad connection
-
-  /** @type {typeof fields[]} */
-  let result = [];
-
-  try {
-    result = await common.find(conn, tableName, fields)
-  } catch (err) {
-    logger.log.error('DATABASE: ', err.message);
-  }
-  return result;
+export function find(connection, tableName, fields) {
+  return Execute(async () => await common.find(await connection, tableName, fields), []);
 }
 
 /**
@@ -36,21 +45,10 @@ export async function find(connection, tableName, fields) {
  * @param {ModelsConnection} connection
  * @param {T} tableName
  * @param {TableNamesID[T]} id
+ * @return {Promise<TableNames[T][]>}
  */
-export async function findById(connection, tableName, id) {
-  const conn = await connection;
-  if (!conn) return null;
-
-  /** @type {TableNames[typeof tableName] | null} */
-  let result = null;
-
-  try {
-    result = await common.findById(conn, tableName, id)
-    if (result.length > 0) result = result[0];
-  } catch (err) {
-    logger.log.error('DATABASE: ', err.message);
-  }
-  return result;
+export function findById(connection, tableName, id) {
+  return Execute(async () => await common.findById(await connection, tableName, id), []);
 }
 
 /**
@@ -59,17 +57,8 @@ export async function findById(connection, tableName, id) {
  * @param {T} tableName
  * @param {TableNames[T] | TableNames[T][]} fields
  */
-export async function create(connection, tableName, fields) {
-  const conn = await connection;
-  if (!conn) return null;
-
-  try {
-    await common.create(conn, tableName, fields)
-    // Handle result if is correct or error
-  } catch (err) {
-    logger.log.error('DATABASE: ', err.message);
-  }
-  return null; // TODO: What returns???
+export function create(connection, tableName, fields) {
+  return Execute(async () => await common.create(await connection, tableName, fields), [[], {}]);
 }
 
 export default {

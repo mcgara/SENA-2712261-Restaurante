@@ -1,45 +1,54 @@
-/** @param {string} route */
-export const guardEndSlash = (route, set=true) => {
+/**
+ * @param {string} route
+ * @param {boolean} [end]
+ * @param {boolean} [start]
+ */
+export function guardSlash(route, end, start) {
   const isEndSlash = route.endsWith('/')
-  if (!isEndSlash && set) route += '/'
-  if (isEndSlash && !set) route = route.slice(0, route.length - 1)
+  if (!isEndSlash && end === true) route += '/'
+  else if (isEndSlash && end === false) route = route.slice(0, route.length)
+  
+  const isStartSlash = route.startsWith('/')
+  if (!isStartSlash && start === true) route = '/' + route
+  else if (isStartSlash && start === false) route = route.slice(1, route.length)
+
   return route
 }
 
 /**
  * @param {`/${string}`} baseRoute
- * @param {number | string} id
+ * @param {string} [path]
  */
-export const routerGet = (baseRoute, id) => guardEndSlash(baseRoute) + id
+export const Get = (baseRoute, path) =>
+  guardSlash(baseRoute, false) +
+  path ? guardSlash(path, null, true) : ''
+
+export const Post = Get
+export const Delete = Get
+export const Put = Get
+export const Patch = Get
 
 /** @param {`/${string}`} baseRoute */
-export const routerGetAll = baseRoute => guardEndSlash(baseRoute, false)
-export const routerPost = routerGetAll
-export const routerDelete = routerGet
-export const routerPut = routerGet
-export const routerPatch = routerGet
-
-/** @param {`/${string}`} baseRoute */
-export const createRouter = baseRoute => {
-  /** @param {number | string} id */
-  const routeById = id => routerGet(baseRoute, id)
-
+export const Router = baseRoute => {
   return {
-    get: routeById,
-    getAll: () => routerGetAll(baseRoute),
-    post: () => routerPost(baseRoute),
-    delete: routeById,
-    put: routeById,
-    patch: routeById
+    /** @param {string} [path] */
+    get: path => Get(baseRoute, path),
+    /** @param {string} [path] */
+    post: path => Post(baseRoute, path),
+    /** @param {string} [path] */
+    delete: path => Put(baseRoute, path),
+    /** @param {string} [path] */
+    put: path => Put(baseRoute, path),
+    /** @param {string} [path] */
+    patch: path => Patch(baseRoute, path)
   }
 }
 
 export default {
-  get: routerGet,
-  getAll: routerGetAll,
-  post: routerPost,
-  delete: routerDelete,
-  put: routerPut,
-  patch: routerPatch,
-  create: createRouter
+  router: Router,
+  get: Get,
+  post: Post,
+  delete: Delete,
+  put: Put,
+  patch: Patch
 }
