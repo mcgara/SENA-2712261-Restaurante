@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { onceCallback } from '../utils.js';
-import { useUser as User } from '../database.js';
+import { useUserModel as User } from '../database.js';
 
 const useUserRoute = onceCallback(() => {
   const router = Router();

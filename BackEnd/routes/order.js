@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { onceCallback } from '../utils.js';
-import { useOrder as Order } from '../database.js';
+import { useOrderModel as Order } from '../database.js';
 
 const useOrderRoute = onceCallback(() => {
   const router = Router();

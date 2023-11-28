@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { onceCallback } from '../utils.js';
-import { useInvoice as Invoice } from '../database.js';
+import { useInvoiceModel as Invoice } from '../database.js';
 
 const useInvoiceRoute = onceCallback(() => {
   const router = Router();

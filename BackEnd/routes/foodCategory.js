@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { onceCallback } from '../utils.js';
-import { useFoodCategory as FoodCategory } from '../database.js';
+import { useFoodCategoryModel as FoodCategory } from '../database.js';
 
 const useFoodCategoryRoute = onceCallback(() => {
   const router = Router();
