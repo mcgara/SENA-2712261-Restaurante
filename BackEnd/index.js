@@ -1,10 +1,18 @@
-import * as app from './app.js';
-import * as appConfig from './app.config.js';
-import * as routes from './routes/index.js';
-import * as defaultBackEnd from './default.js';
-import database from './database.js';
-import utils from './utils.js';
-import runBackEnd from './run.js';
+import * as appLib from './app.js';
+import * as appConfigLib from './app.config.js';
+import * as routesLib from './routes/index.js';
+import * as defaultBackEndLib from './default.js';
+import databaseLib from './database.js';
+import utilsLib from './utils.js';
+import runBackEndLib from './run.js';
+
+export const app = appLib;
+export const appConfig = appConfigLib;
+export const routes = routesLib;
+export const defaultBackEnd = defaultBackEndLib;
+export const database = databaseLib;
+export const utils = utilsLib;
+export const runBackEnd = runBackEndLib;
 
 export default {
   app,

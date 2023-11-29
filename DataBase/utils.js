@@ -45,7 +45,8 @@ export const useDotenv = onceCallback(() => {
 export const logger = (() => {
   process.env['LOG_LEVEL'] = process.env['DEBUG'] ? 'debug' : 'info';
   const level = process.env['LOG_LEVEL'];
-  const writter = logNode();
+  let writter = null;
+  try { writter = logNode(); } catch {}
   return {
     level,
     writter,

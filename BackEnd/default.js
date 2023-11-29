@@ -31,10 +31,10 @@ export const useAppRoutes = onceCallback(() => {
   useInvoiceRoute().setAll();
 
   return app;
-})
+});
 
 export const useBackEnd = onceCallback(() => {
   useDotenv();
   useAppRoutes();
   return runBackEnd(useApp(), useAppConfig());
-})
+});
