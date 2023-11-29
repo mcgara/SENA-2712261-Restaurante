@@ -45,7 +45,7 @@ export interface Invoice {
   create_time: Date
 }
 
-export interface TableNamesID {
+export interface ITableModelID {
   'user': UserID
   'food': FoodID
   'food_category': FoodCategoryID
@@ -53,10 +53,12 @@ export interface TableNamesID {
   'invoice': InvoiceID
 }
 
-export interface TableNames {
+export interface ITableModel {
   'user': User
   'food': Food
   'food_category': FoodCategory
   'order': Order
   'invoice': Invoice
 }
+
+export type TableModelNames = { [P in keyof ITableModel]: P }[keyof ITableModel]

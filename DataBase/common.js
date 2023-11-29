@@ -26,7 +26,7 @@ export function formatQueryFields(fields, callback, sep) {
 /**
  * @param {Connection} connection
  * @param {string} tableName
- * @param {FieldsParam} fields
+ * @param {Partial<FieldsParam>} [fields]
  * @return {Promise<QueryResults['0']>}
  */
 export async function find(connection, tableName, fields) {
