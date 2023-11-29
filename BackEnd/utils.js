@@ -16,7 +16,7 @@ export const dotenvPathApp = joinWithRoot('../.env');
 export const dotenvPath = joinWithRoot('.env');
 
 export const onceCallback = utils.onceCallback;
-export const useLogger = utils.useLogger;
+export const logger = utils.logger;
 
 export const useDotenv = onceCallback(() => {
   dotenv.config({ path: dotenvPathApp });
@@ -33,5 +33,5 @@ export default {
   dotenvPathApp,
   dotenvPath,
   useDotenv,
-  useLogger
+  logger
 }

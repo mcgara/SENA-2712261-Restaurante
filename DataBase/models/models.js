@@ -1,43 +1,43 @@
-import { readFile } from 'node:fs/promises';
-import { joinWithRoot, useLogger } from '../utils.js';
+import CommonModel from './common.js';
 
-/**
- * @typedef {import('../common').Connection} Connection
- */
+/** @typedef {import('./connection').ModelConnection} ModelConnection */
 
-export const modelsFilePath = joinWithRoot('models/models.sql');
-export const modelsFile = readFile(modelsFilePath, { encoding: 'utf-8' });
-
-/** @param {Promise<Connection>} connection */
-export async function createModelsConnection(connection) {
-  const logger = useLogger();
-  
-  /** @type {string | null} */
-  let script = null;
-
-  try {
-    script = await modelsFile;
-  } catch (err) {
-    logger.log.error('DATABASE: ', err.message ?? 'error on load models file.');
+/** @extends {CommonModel<'user'>} */
+export class UserModel extends CommonModel {
+  /** @param {ModelConnection} connection */
+  constructor(connection) {
+    super(connection, 'user');
   }
-  
-  if (script === null) return connection;
-  
-  try {
-    const queries = script.trim().split(';').map(query => query.trim());
-    const modelsConnection = await connection;
-    for (const query of queries) {
-      if (!query) continue;
-      await modelsConnection.query(query);
-    }
-    logger.log.notice('%s: successful queries of models file script.', 'DATABASE');
-  } catch (err) {
-    logger.log.error(`DATABASE: ', '${err.message ?? 'error execute models file script.'}`, err.code ?? '');
-  }
-
-  return connection;
 }
 
-/** @typedef {ReturnType<createModelsConnection>} ModelsConnection */
+/** @extends {CommonModel<'food'>} */
+export class FoodModel extends CommonModel {
+  /** @param {ModelConnection} connection */
+  constructor(connection) {
+    super(connection, 'food');
+  }
+}
 
-export default createModelsConnection;
+/** @extends {CommonModel<'food_category'>} */
+export class FoodCategoryModel extends CommonModel {
+  /** @param {ModelConnection} connection */
+  constructor(connection) {
+    super(connection, 'food_category');
+  }
+}
+
+/** @extends {CommonModel<'order'>} */
+export class OrderModel extends CommonModel {
+  /** @param {ModelConnection} connection */
+  constructor(connection) {
+    super(connection, 'order');
+  }
+}
+
+/** @extends {CommonModel<'invoice'>} */
+export class InvoiceModel extends CommonModel {
+  /** @param {ModelConnection} connection */
+  constructor(connection) {
+    super(connection, 'invoice');
+  }
+}

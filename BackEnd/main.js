@@ -1,5 +1,5 @@
-import { useDataBase } from './database.js';
+import { defaultDataBase } from './database.js';
 import { useBackEnd } from './default.js';
 
-await useDataBase();
+await defaultDataBase.useDataBase();
 useBackEnd();

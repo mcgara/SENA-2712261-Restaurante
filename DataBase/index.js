@@ -1,10 +1,11 @@
-import models from './models/index.js';
-import utils, { useLogger } from './utils.js';
+import * as models from './models/index.js';
+import * as connection from './connection.js';
+import * as connectionConfig from './connection.config.js';
+import * as defaultDataBase from './default.js';
+import utils, { logger } from './utils.js';
 
 /** @param {import('./common.js').Connection} connection */
 export async function runDataBase (connection) {
-  const logger = useLogger();
-
   try {
     await connection.connect();
     logger.log.notice('%s', 'DATABASE: successful connection.');
@@ -17,7 +18,10 @@ export async function runDataBase (connection) {
 }
 
 export default {
-  ...models,
+  connection,
+  connectionConfig,
+  models,
+  defaultDataBase,
   utils,
   runDataBase
 }

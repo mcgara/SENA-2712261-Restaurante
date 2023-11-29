@@ -42,7 +42,7 @@ export const useDotenv = onceCallback(() => {
   });
 })
 
-export function createLogger() {
+export const logger = (() => {
   process.env['LOG_LEVEL'] = process.env['DEBUG'] ? 'debug' : 'info';
   const level = process.env['LOG_LEVEL'];
   const writter = logNode();
@@ -51,9 +51,7 @@ export function createLogger() {
     writter,
     log
   }
-}
-
-export const useLogger = onceCallback(createLogger);
+})();
 
 export default {
   root,
@@ -62,6 +60,5 @@ export default {
   dotenvPathApp,
   dotenvPath,
   useDotenv,
-  createLogger,
-  useLogger
+  logger
 }

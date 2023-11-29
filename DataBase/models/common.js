@@ -1,11 +1,11 @@
 import * as common from '../common.js'
-import { useLogger } from '../utils.js';
+import { logger } from '../utils.js';
 
 /**
- * @typedef {import('./models.js').ModelsConnection} ModelsConnection
- * @typedef {import('./types.js').TableNames} TableNames
- * @typedef {import('./types.js').TableNamesID} TableNamesID
- * @typedef {{ [P in keyof TableNames]: P }[keyof TableNames]} AllTableNames
+ * @typedef {import('./connection.js').ModelConnection} ModelConnection
+ * @typedef {import('./types.js').ITableModel} ITableModel
+ * @typedef {import('./types.js').ITableModelID} ITableModelID
+ * @typedef {import('./types.js').TableModelNames} TableModelNames
  */
 
 /**
@@ -16,7 +16,6 @@ import { useLogger } from '../utils.js';
  * @return {Promise<T | U>}
  */
 export async function Execute(callback, defaultValue) {
-  const logger = useLogger();
   let value = defaultValue;
   
   try {
@@ -29,11 +28,11 @@ export async function Execute(callback, defaultValue) {
 }
 
 /**
- * @template {AllTableNames} T
- * @param {ModelsConnection} connection
+ * @template {TableModelNames} T
+ * @param {ModelConnection} connection
  * @param {T} tableName
- * @param {Partial<TableNames[T]>} fields
- * @return {Promise<TableNames[T][]>}
+ * @param {Partial<ITableModel[T]>} [fields]
+ * @return {Promise<ITableModel[T][]>}
  */
 export function find(connection, tableName, fields) {
   return Execute(async () => await common.find
@@ -42,11 +41,25 @@ export function find(connection, tableName, fields) {
 }
 
 /**
- * @template {AllTableNames} T
- * @param {ModelsConnection} connection
+ * @template {TableModelNames} T
+ * @param {ModelConnection} connection
  * @param {T} tableName
- * @param {TableNamesID[T]} id
- * @return {Promise<TableNames[T][]>}
+ * @param {string} pkName
+ * @param {ITableModelID[T]} pkValue
+ * @return {Promise<ITableModel[T][]>}
+ */
+export function findByPk(connection, tableName, pkName, pkValue) {
+  return Execute(async () => await common.findByPk
+    (await connection, tableName, pkName, pkValue), []
+  );
+}
+
+/**
+ * @template {TableModelNames} T
+ * @param {ModelConnection} connection
+ * @param {T} tableName
+ * @param {ITableModelID[T]} id
+ * @return {Promise<ITableModel[T][]>}
  */
 export function findById(connection, tableName, id) {
   return Execute(async () => await common.findById
@@ -55,37 +68,47 @@ export function findById(connection, tableName, id) {
 }
 
 /**
- * @template {AllTableNames} T
- * @param {ModelsConnection} connection
+ * @template {TableModelNames} T
+ * @param {ModelConnection} connection
  * @param {T} tableName
- * @param {TableNames[T] | TableNames[T][]} fields
+ * @param {ITableModel[T] | ITableModel[T][]} fields
  */
 export function create(connection, tableName, fields) {
   return Execute(async () => await common.create
-    (await connection, tableName, fields), [[], {}]
+    (await connection, tableName, fields), [[], Object()]
   );
 }
 
-/**
- * @template {AllTableNames} T
- * @param {ModelsConnection} connection
- * @param {T} tableName
- * @param {TableNames[T] | TableNames[T][]} fields
- */
-export function Common(connection, tableName) {
-  return {
-    /** @param {Parameters<find>['2']} fields */
-    find: fields => find(connection, tableName, fields),
-    /**
-     * @param {Parameters<findByPk>['2']} pkName
-     * @param {Parameters<findByPk>['3']} pkValue
-    */
-    findByPk: (pkName, pkValue) => findByPk(connection, tableName, pkName, pkValue),
-    /** @param {Parameters<findById>['2']} id */
-    findById: id => findById(connection, tableName, id),
-    /** @param {Parameters<create>['2']} fields */
-    create: fields => create(connection, tableName, fields),
+/** @template {TableModelNames} T */
+export class CommonModel {
+  /**
+   * @param {ModelConnection} connection
+   * @param {T} tableName
+   */
+  constructor(connection, tableName) {
+    this.connection = connection;
+    this.tableName = tableName;
+  }
+
+  /** @param {Partial<ITableModel[T]>} [fields] */
+  find(fields) {
+    return find(this.connection, this.tableName, fields);
+  }
+  /**
+   * @param {Parameters<typeof findByPk>['2']} pkName
+   * @param {Parameters<typeof findByPk>['3']} pkValue
+  */
+  findByPk(pkName, pkValue) {
+    return findByPk(this.connection, this.tableName, pkName, pkValue);
+  }
+  /** @param {ITableModelID[T]} id */
+  findById(id) {
+    return findById(this.connection, this.tableName, id);
+  }
+  /** @param {ITableModel[T]} fields */
+  create(fields) {
+    return create(this.connection, this.tableName, fields);
   }
 }
 
-export default Common;
+export default CommonModel;
