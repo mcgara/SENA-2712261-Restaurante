@@ -4,7 +4,7 @@ import createApp from './app.js';
 import createAppConfig from './app.config.js';
 import * as routes from './routes/index.js';
 import { defaultDataBase as db } from './database.js';
-import { runBackEnd } from './index.js';
+import runBackEnd from './run.js';
 
 export const useApp = onceCallback(() => createApp());
 export const useAppConfig = onceCallback(() => createAppConfig());

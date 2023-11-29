@@ -2,7 +2,7 @@ import { onceCallback, useDotenv } from './utils.js';
 import createConnection from './connection.js';
 import createConnectionConfig from './connection.config.js';
 import models, { createModelConnection } from './models/index.js';
-import { runDataBase } from './index.js';
+import runDataBase from './run.js';
 
 export const useConnectionConfig = onceCallback(() => createConnectionConfig());
 export const useConnection = onceCallback(() => createConnection(useConnectionConfig()));
