@@ -1,21 +1,16 @@
-import { spawn } from 'node:child_process';
+import * as databaseLib from './DataBase/index.js';
+import * as backendLib from './BackEnd/index.js';
+import * as frontendLib from './FrontEnd/index.js';
+import * as runAppLib from './run.js';
 
-const commands = {
-  database: 'npm run database',
-  backend: 'npm run backend',
-  frontend: 'npm run frontend',
-}
-
-export function runApp() {
-  // const database = spawn(commands.database);
-  const stdio = ['pipe', 'inherit', 'inherit']
-  const backend = spawn(commands.backend, { stdio, shell: true });
-  const frontend = spawn(commands.frontend, { stdio: 'inherit', shell: true });
-  
-  backend.on('error', err => console.error(err));
-  frontend.on('error', err => console.error(err));
-}
+export const database = databaseLib;
+export const backend = backendLib;
+export const frontend = frontendLib;
+export const runApp = runAppLib;
 
 export default {
+  database,
+  backend,
+  frontend,
   runApp
 }
