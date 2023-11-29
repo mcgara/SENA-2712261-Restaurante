@@ -1,3 +1,3 @@
-const { useFrontEnd } = require('./index.js');
+import { useFrontEnd } from './run.js';
 
 useFrontEnd();

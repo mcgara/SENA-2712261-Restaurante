@@ -3,7 +3,7 @@
  * @param {T} callback
  * @return {T}
  */
-function onceCallback(callback) {
+export function onceCallback(callback) {
   if (typeof callback !== 'function') throw TypeError('parameter callback must be type function');
   let value;
   let onceCall = false;
@@ -21,12 +21,12 @@ function onceCallback(callback) {
  * @param {T} obj
  * @return {T extends Array ? T : T[]}
  */
-function toArray(obj) {
+export function toArray(obj) {
   if (!Array.isArray(obj)) obj = [obj]
   return obj
 }
 
-module.exports = {
+export default {
   onceCallback,
   toArray
 }
