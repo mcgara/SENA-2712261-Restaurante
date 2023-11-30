@@ -4,18 +4,17 @@ const commands = {
   database: process.argv[2]?.toLowerCase() === 'database',
   backend: process.argv[2]?.toLowerCase() === 'backend',
   frontend: process.argv[2]?.toLowerCase() === 'frontend',
-  appApi: process.argv[2]?.toLowerCase() === 'appapi',
+  api: process.argv[2]?.toLowerCase() === 'api',
   app: process.argv[2]?.toLowerCase() === 'app',
+}
+
+if (Object.values(commands).includes(true)) {
+  process.argv.splice(2, 1);
 }
 
 if (commands.database) app.runDataBase();
 else if (commands.backend) app.runBackEnd();
 else if (commands.frontend) app.runFrontEnd();
-else if (commands.appApi) app.runAppApi();
+else if (commands.api) app.runAppApi();
 else if (commands.app) app.runApp();
-
-if (Object.values(commands).includes(true)) {
-  process.argv = [...process.argv.slice(0, 2), ...process.argv.slice(3)]
-}
-
-console.log(process.argv)
+else app.runApp();
