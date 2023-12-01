@@ -85,7 +85,6 @@ export async function create(connection, tableName, fields) {
   }
   queryAllValues = queryAllValues.slice(0, -1);
 
-  msgErr = 'error to create in database'
   const query = `INSERT INTO \`${tableName}\`(${queryFields}) VALUES ${queryAllValues}`;
   return await connection.query(query, arrayAllValues);
 }

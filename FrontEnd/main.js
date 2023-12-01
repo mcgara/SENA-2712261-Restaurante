@@ -1,3 +1,3 @@
-import { useFrontEnd } from './run.js';
+import { useFrontEnd } from './default.js';
 
 useFrontEnd();
