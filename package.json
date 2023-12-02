@@ -11,6 +11,7 @@
     "frontend": "node main.js frontend",
     "api": "node main.js api",
     "app": "node main.js app",
+    "dev": "node --watch main.js",
     "database:dev": "cd DataBase && npm run dev && cd ..",
     "backend:dev": "cd BackEnd && npm run dev && cd ..",
     "frontend:dev": "cd FrontEnd && npm run dev && cd ..",
