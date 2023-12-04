@@ -5,19 +5,18 @@ import { toArray } from '../../utils'
 /**
  * @typedef {import('./Icon').IconProps & {
  *   style?: import('../types').ViewStyleProp,
- * }} MenuIconProps 
- * @type {import('react').FC<MenuIconProps>}
- * @param {MenuIconProps}
+ * }} ArrowIconProps 
+ * @type {import('react').FC<ArrowIconProps>}
+ * @param {ArrowIconProps}
  */
-export function MenuIcon({ sizeIcon, scaleIcon, styleIcon, style }) {
+export function ArrowIcon({ sizeIcon, scaleIcon, styleIcon, style }) {
   style = toArray(style)
   
   return (
     <Icon sizeIcon={sizeIcon} scaleIcon={scaleIcon} styleIcon={styleIcon}>
       <View style={styles.container}>
-        <View style={[styles.line, ...style]}/>
-        <View style={[styles.line, ...style]}/>
-        <View style={[styles.line, ...style]}/>
+        <View style={[styles.head, ...style]}/>
+        <View style={[styles.tail, ...style]}/>
       </View>
     </Icon>
   )
@@ -27,16 +26,19 @@ export const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
     paddingVertical: '20%',
   },
-  line: {
-    width: '50%',
-    height: 3.5,
-    backgroundColor: '#000',
-    borderRadius: 100
+  head: {
+    borderLeftWidth: 30,
+    borderLeftColor: '#000'
+  },
+  tail: {
+    width: '100%',
+    height: 5,
+    backgroundColor: '#000'
   }
 })
 
-export default MenuIcon
+export default ArrowIcon

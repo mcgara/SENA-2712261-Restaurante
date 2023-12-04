@@ -10,7 +10,7 @@ export type InvoiceModel = InstanceType<typeof models.InvoiceModel>
 
 export type ModelDataBase = UserModel | FoodModel | FoodCategoryModel | OrderModel | InvoiceModel
 
-export interface IRouteModel {
+export interface IApiRoutes {
   '/user': UserModel
   '/food': FoodModel
   '/food_category': FoodCategoryModel
@@ -18,4 +18,4 @@ export interface IRouteModel {
   '/invoice': InvoiceModel
 }
 
-export type AllRouteModel = { [P in keyof IRouteModel]: P }[keyof IRouteModel]
+export type ApiRoutes = { [P in keyof IApiRoutes]: P }[keyof IApiRoutes]

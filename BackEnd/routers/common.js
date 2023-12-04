@@ -2,8 +2,8 @@
  * @typedef {import('express').Router} Router
  * @typedef {import('express').RequestHandler} RequestHandler
  * @typedef {import('./types').ModelDataBase} ModelDataBase
- * @typedef {import('./types').AllRouteModel} AllRouteModel
- * @typedef {import('./types').IRouteModel} IRouteModel
+ * @typedef {import('./types').ApiRoutes} ApiRoutes
+ * @typedef {import('./types').IApiRoutes} IApiRoutes
  */
 
 /**
@@ -54,12 +54,12 @@ export function post(model) {
   return handler;
 }
 
-/** @template {AllRouteModel} T */
-export class CommonRoute {
+/** @template {ApiRoutes} T */
+export class CommonRouter {
   /**
    * @param {Router} router
    * @param {T} path
-   * @param {IRouteModel[T]} model
+   * @param {IApiRoutes[T]} model
    */
   constructor(router, path, model) {
     this.router = router;
@@ -84,4 +84,4 @@ export class CommonRoute {
   }
 }
 
-export default CommonRoute;
+export default CommonRouter;

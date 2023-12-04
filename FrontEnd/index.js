@@ -1,6 +1,6 @@
-import * as appConfigLib from './app.config.js';
-import * as runFrontEndLib from './run.js';
-import * as defaultFrontEndLib from './default.js';
+import * as appConfigLib from './app.config.node.js';
+import * as runFrontEndLib from './run.node.js';
+import * as defaultFrontEndLib from './default.node.js';
 import utilsLib from './utils.js'
 import utilsNodeLib from './utils.node.js'
 

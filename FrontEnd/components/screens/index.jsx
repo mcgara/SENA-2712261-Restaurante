@@ -1,13 +1,10 @@
 import Home from './Home'
-import HomeMock from './Home.mock'
 
-/** @typedef {'Home' | 'HomeMock'} ScreenNames */
-export const ScreenDefault = HomeMock
+/** @typedef {'Home'} ScreenNames */
+export const ScreenDefault = Home
 
 export const HomeScreen = Home
-export const HomeMockScreen = HomeMock
 
 export default {
-  Home: <Home/>,
-  HomeMock: <HomeMock/>
+  Home: <Home />
 }

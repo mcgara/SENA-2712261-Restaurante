@@ -2,14 +2,14 @@ import CommonRouter from './common.js';
 
 /** 
  * @typedef {import('express').Router} Router
- * @typedef {import('./types').IRouteModel} IRouteModel
+ * @typedef {import('./types').IApiRoutes} IApiRoutes
  */
 
 /** @extends {CommonRouter<'/user'>} */
-export class UserRoute extends CommonRouter {
+export class UserRouter extends CommonRouter {
   /**
    * @param {Router} router
-   * @param {IRouteModel['/user']} model
+   * @param {IApiRoutes['/user']} model
    */
   constructor(router, model) {
     super(router, '/user', model);
@@ -17,10 +17,10 @@ export class UserRoute extends CommonRouter {
 }
 
 /** @extends {CommonRouter<'/food'>} */
-export class FoodRoute extends CommonRouter {
+export class FoodRouter extends CommonRouter {
   /**
    * @param {Router} router
-   * @param {IRouteModel['/food']} model
+   * @param {IApiRoutes['/food']} model
    */
   constructor(router, model) {
     super(router, '/food', model);
@@ -28,10 +28,10 @@ export class FoodRoute extends CommonRouter {
 }
 
 /** @extends {CommonRouter<'/food_category'>} */
-export class FoodCategoryRoute extends CommonRouter {
+export class FoodCategoryRouter extends CommonRouter {
   /**
    * @param {Router} router
-   * @param {IRouteModel['/food_category']} model
+   * @param {IApiRoutes['/food_category']} model
    */
   constructor(router, model) {
     super(router, '/food_category', model);
@@ -39,10 +39,10 @@ export class FoodCategoryRoute extends CommonRouter {
 }
 
 /** @extends {CommonRouter<'/order'>} */
-export class OrderRoute extends CommonRouter {
+export class OrderRouter extends CommonRouter {
   /**
    * @param {Router} router
-   * @param {IRouteModel['/order']} model
+   * @param {IApiRoutes['/order']} model
    */
   constructor(router, model) {
     super(router, '/order', model);
@@ -50,10 +50,10 @@ export class OrderRoute extends CommonRouter {
 }
 
 /** @extends {CommonRouter<'/invoice'>} */
-export class InvoiceRoute extends CommonRouter {
+export class InvoiceRouter extends CommonRouter {
   /**
    * @param {Router} router
-   * @param {IRouteModel['/invoice']} model
+   * @param {IApiRoutes['/invoice']} model
    */
   constructor(router, model) {
     super(router, '/invoice', model);

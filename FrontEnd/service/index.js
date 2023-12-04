@@ -1,8 +1,13 @@
-import { API_URL, api } from './api'
-import User from './user'
+import * as api from './api'
+import * as commonRoutesLib from './routes.common'
+import * as routes from './routes'
 
-export default {
-  API_URL,
-  api,
-  User
-}
+export const { createApi, getApiUrlEnv } = api
+export const commonRoutes = commonRoutesLib
+export const {
+  UserRoute,
+  FoodRoute,
+  FoodCategoryRoute,
+  OrderRoute,
+  InvoiceRoute
+} = routes
