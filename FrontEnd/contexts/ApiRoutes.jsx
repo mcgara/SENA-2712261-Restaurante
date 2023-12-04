@@ -35,7 +35,9 @@ const apiRoutes = {
     apiRoutes.value = value
     apiRoutes.events.emit('afterchange')
   },
-  mode: apiMode
+  mode: apiMode,
+  /**  */
+  route: null
 }
 
 /** @typedef {typeof apiRoutes} ApiRoutesContextValue */

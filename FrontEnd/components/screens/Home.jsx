@@ -7,6 +7,7 @@ import BarApiMode from '../BarApiMode'
 import PadButtonsApi from '../PadButtonsApi'
 import getComponentApi from '../api/index'
 import useForceUpdate from '../../hooks/useForceUpdate'
+import { useUserRoute } from '../../default'
 
 /** @type {import('react').FC<{}>} */
 export function HomeScreen() {
@@ -15,7 +16,11 @@ export function HomeScreen() {
 
   useForceUpdate((forceUpdate) => {
     api.events.on('afterchange', forceUpdate)
-    return () => api.events.off('afterchange', forceUpdate)
+    api.mode.events.on('afterchange', forceUpdate)
+    return () => {
+      api.events.off('afterchange', forceUpdate)
+      api.mode.events.off('afterchange', forceUpdate)
+    }
   }, [])
 
   return (
@@ -35,7 +40,7 @@ export function HomeScreen() {
         {
           !api.value
           ? <PadButtonsApi api={api} />
-          : getComponentApi(api)
+          : <Text>{api.mode.value}</Text>
         }
       </View>
     </ScreenBg>

@@ -26,14 +26,6 @@ export class FoodCategoryRoute extends CommonRoute {
   }
 }
 
-/** @extends {CommonRoute<'/food_category'>} */
-export class FoodCategoryRoute extends CommonRoute {
-  /** @param {Api} api */
-  constructor(api) {
-    super(api, '/food_category')
-  }
-}
-
 /** @extends {CommonRoute<'/order'>} */
 export class OrderRoute extends CommonRoute {
   /** @param {Api} api */
