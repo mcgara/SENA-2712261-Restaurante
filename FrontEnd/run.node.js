@@ -5,8 +5,8 @@ export const expoPrefixEnv = 'EXPO_PUBLIC';
 export const expoURLEnv = 'EXPO_PACKAGER_PROXY_URL';
 
 /**
- * @typedef {import('./app.config').AppConfig} AppConfig
- * @typedef {import('./app.config').AppConfigApi} AppConfigApi
+ * @typedef {import('./app.config.node').AppConfig} AppConfig
+ * @typedef {import('./app.config.node').AppConfigApi} AppConfigApi
  * @typedef {typeof expoPrefixEnv} ExpoPrefixEnv
  * @typedef {typeof expoURLEnv} ExpoURLEnv
  */
@@ -20,7 +20,7 @@ export const appCommandOptions = {
   cwd: root
 }
 
-/** @param {import('./app.config').AppConfig} config */
+/** @param {AppConfig} config */
 export function appArgv(config) {
   /** @type {string[]} */
   const argv = process.argv.slice(2);

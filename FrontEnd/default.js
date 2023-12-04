@@ -1,12 +1,13 @@
-import { onceCallback } from './utils.js';
-import { useDotenv } from './utils.node.js';
-import { appConfig, appConfigApi } from './app.config.js';
-import { appArgv, runFrontEnd } from './run.js';
+import { onceCallback } from './utils'
+import * as service from './service/index'
 
-export const useAppConfig = onceCallback(appConfig);
-export const useAppConfigApi = onceCallback(appConfigApi);
-export const useAppArgv = onceCallback(() => appArgv(useAppConfig()));
-export const useFrontEnd = onceCallback(() => {
-  useDotenv();
-  return runFrontEnd(useAppArgv(), useAppConfig(), useAppConfigApi());
-});
+export const useApi = onceCallback(() => {
+  const url = service.getApiUrlEnv()
+  return url ? service.createApi(url) : null
+})
+
+export const useUserRoute = onceCallback(() => new service.UserRoute(useApi()))
+export const useFoodRoute = onceCallback(() => new service.FoodRoute(useApi()))
+export const useFoodCategoryRoute = onceCallback(() => new service.FoodCategoryRoute(useApi()))
+export const useOrderRoute = onceCallback(() => new service.OrderRoute(useApi()))
+export const useInvoiceRoute = onceCallback(() => new service.InvoiceRoute(useApi()))
