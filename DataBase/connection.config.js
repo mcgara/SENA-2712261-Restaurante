@@ -2,7 +2,7 @@
 
 /** @type {ConnectionConfig} */
 export const defaultConnectionConfig = {
-  database: 'restaurant_database',
+  database: '',
   host: 'localhost',
   port: 3306,
   user: 'root',
