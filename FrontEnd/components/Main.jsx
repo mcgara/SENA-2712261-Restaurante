@@ -1,15 +1,15 @@
 import { View, StyleSheet } from 'react-native'
 import { ScreensProvider } from '../contexts/Screens'
-import { ApiRoutesProvider } from '../contexts/ApiRoutes'
+import { ApiProvider } from '../contexts/Api'
 import Screens, { ScreenDefault } from './screens/index'
 
 export function Main() {
   return (
     <View style={styles.container}>
       <ScreensProvider screens={Screens}>
-        <ApiRoutesProvider>
+        <ApiProvider>
           <ScreenDefault />
-        </ApiRoutesProvider>
+        </ApiProvider>
       </ScreensProvider>
     </View>
   )

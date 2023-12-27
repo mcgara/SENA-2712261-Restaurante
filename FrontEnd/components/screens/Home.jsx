@@ -1,46 +1,56 @@
 import { useContext } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { ScreensContext, ApiRoutesContext } from '../../contexts/index'
+import { ScreensContext, ApiContext } from '../../contexts/index'
 import ScreenBg from '../designs/ScreenBg'
 import CircleButton from '../CircleButton'
 import BarApiMode from '../BarApiMode'
 import PadButtonsApi from '../PadButtonsApi'
-import getComponentApi from '../api/index'
 import useForceUpdate from '../../hooks/useForceUpdate'
-import { useUserRoute } from '../../default'
+import GetComponentApi from '../api/Index'
+
+/** @type {Record<import('../api/Index').ApiRoutes, string>} */
+const i18nTitle = {
+  '/user': 'Usuarios',
+  '/food': 'Comidas',
+  '/food_category': 'Categorias',
+  '/order': 'Pedidos',
+  '/invoice': 'Facturas'
+}
 
 /** @type {import('react').FC<{}>} */
 export function HomeScreen() {
   const { screenStyles } = useContext(ScreensContext)
-  const api = useContext(ApiRoutesContext)
+  const api = useContext(ApiContext)
 
-  useForceUpdate((forceUpdate) => {
-    api.events.on('afterchange', forceUpdate)
-    api.mode.events.on('afterchange', forceUpdate)
+  useForceUpdate((updater) => {
+    api.route.events.on('afterchange', updater)
+    api.mode.events.on('afterchange', updater)
     return () => {
-      api.events.off('afterchange', forceUpdate)
-      api.mode.events.off('afterchange', forceUpdate)
+      api.route.events.off('afterchange', updater)
+      api.mode.events.off('afterchange', updater)
     }
   }, [])
+
+  const title = i18nTitle[api.route.value?.route] ?? 'Restaurante'
 
   return (
     <ScreenBg style={styles.bg}>
       <View style={[screenStyles.container, styles.container]}>
         <View style={styles.header}>
           <View style={styles.row}>
+            <Text style={styles.title}>API {title}</Text>
             {
-              api.value
-              ? <CircleButton text='<-' scale={0.08} style={styles.button} onPress={() => api.set(null)} />
+              !!api.route.value
+              ? <CircleButton text='<-' scale={0.08} style={styles.button} onPress={() => api.route.set(null)} />
               : null
             }
-            <Text style={styles.title}>API {api.value ?? 'Restaurante'}</Text>
           </View>
           <BarApiMode api={api} />
         </View>
         {
-          !api.value
+          !api.route.value
           ? <PadButtonsApi api={api} />
-          : <Text>{api.mode.value}</Text>
+          : <GetComponentApi api={api} />
         }
       </View>
     </ScreenBg>
@@ -57,12 +67,11 @@ export const styles = StyleSheet.create({
   },
   header: {
     width: '100%',
-    paddingVertical: 20,
-    position: 'relative'
+    paddingVertical: 20
   },
   row: {
     flexDirection: 'row-reverse',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   title: {
     fontSize: 32,
@@ -71,9 +80,9 @@ export const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    left: 50,
+    right: 0,
     backgroundColor: '#ed0',
-    borderColor: '#eee',
+    borderColor: '#000',
   }
 })
 

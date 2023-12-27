@@ -1,10 +1,10 @@
 import Screens from './Screens'
-import ApiRoutes from './ApiRoutes'
+import Api from './Api'
 
 export const ScreensContext = Screens
-export const ApiRoutesContext = ApiRoutes
+export const ApiContext = Api
 
 export default {
   Screens,
-  ApiRoutes
+  Api
 }

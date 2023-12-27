@@ -2,19 +2,19 @@ import { View, StyleSheet } from 'react-native'
 import CircleButton from './CircleButton'
 
 /**
- * @typedef {import('../contexts/ApiRoutes').ApiRoutesContextValue} ApiRoutesContextValue
- * @typedef {{ api: ApiRoutesContextValue }} PadButtonsApiProps
+ * @typedef {import('../contexts/Api').ApiContextValue} ApiContextValue
+ * @typedef {{ api: ApiContextValue }} PadButtonsApiProps
  * @type {import('react').FC<PadButtonsApiProps>}
  * @param {PadButtonsApiProps}
  */
 export function PadButtonsApi({ api }) {
   return (
     <View style={styles.container}>
-      <CircleButton text='Usuarios' onPress={() => api.set('/user')} />
-      <CircleButton text='Comida' onPress={() => api.set('/food')} />
-      <CircleButton text='Categorias' onPress={() => api.set('/food_category')} />
-      <CircleButton text='Pedidos' onPress={() => api.set('/order')} />
-      <CircleButton text='Facturas' onPress={() => api.set('/invoice')} />
+      <CircleButton text='Usuarios' onPress={() => api.route.set('/user')} />
+      <CircleButton text='Comidas' onPress={() => api.route.set('/food')} />
+      <CircleButton text='Categorias' onPress={() => api.route.set('/food_category')} />
+      <CircleButton text='Pedidos' onPress={() => api.route.set('/order')} />
+      <CircleButton text='Facturas' onPress={() => api.route.set('/invoice')} />
     </View>
   )
 }

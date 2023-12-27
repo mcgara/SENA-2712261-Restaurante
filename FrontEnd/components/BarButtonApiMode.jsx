@@ -2,10 +2,10 @@ import { Pressable, Text, StyleSheet } from 'react-native'
 import useForceUpdate from '../hooks/useForceUpdate'
 
 /**
- * @typedef {import('../contexts/ApiRoutes').ApiRoutesContextValue} ApiRoutesContextValue
- * @typedef {import('../contexts/ApiRoutes').ApiMode} ApiMode
+ * @typedef {import('../contexts/Api').ApiContextValue} ApiContextValue
+ * @typedef {import('../contexts/Api').ApiMode} ApiMode
  * @typedef {{
- *   api: ApiRoutesContextValue
+ *   api: ApiContextValue
  *   mode: ApiMode
  *   text?: string
  * }} BarButtonApiModeProps
@@ -13,9 +13,9 @@ import useForceUpdate from '../hooks/useForceUpdate'
  * @param {BarButtonApiModeProps}
  */
 export function BarButtonApiMode({ api, mode, text }) {
-  useForceUpdate((forceUpdate) => {
-    api.mode.events.on('afterchange', forceUpdate)
-    return () => api.mode.events.off('afterchange', forceUpdate)
+  useForceUpdate(updater => {
+    api.mode.events.on('afterchange', updater)
+    return () => api.mode.events.off('afterchange', updater)
   }, [])
 
   const isMode = mode === api.mode.value

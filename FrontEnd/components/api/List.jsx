@@ -1,17 +1,23 @@
-import { useId } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { toArray } from '../../utils'
 import ApiItem from './Item'
+import useAsyncValue from '../../hooks/useAsyncValue'
 
 /**
- * @type {import('./index').ComponentApi}
- * @param {import('./index').ComponentApiProps}
+ * @typedef {import('./Index').ApiRoutesData} ApiRoutesData
+ * @typedef {import('./Index').ComponentApiProps} ComponentApiProps
+ * @typedef {ComponentApiProps & {
+ *   fields?: Partial<ApiRoutesData>
+ * }} ApiListProps
+ * @type {import('react').FC<ApiListProps>}
+ * @param {ApiListProps}
  */
-export function ApiList({ data }) {
-  const items = toArray(data)
+export function ApiList({ api, fields }) {
+  let [items] = useAsyncValue(async () => await api.route.value.find(fields), [], [])
+
   return (
     <ScrollView>
-      {items.map((item) => <ApiItem key={useId()} data={item} />)}
+      {items.map((dataItem, i) => <ApiItem key={i} data={dataItem} />)}
     </ScrollView>
   )
 }

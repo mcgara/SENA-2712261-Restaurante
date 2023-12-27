@@ -1,15 +1,15 @@
 /**
  * @typedef {import('axios').AxiosInstance | null} Api
  * @typedef {import('./types').ApiRoutes} ApiRoutes
- * @typedef {import('./types').IApiRoutes} IApiRoutes
+ * @typedef {import('./types').IApiRoutesData} IApiRoutesData
  */
 
 /**
  * @template {ApiRoutes} T
  * @param {Api} api
  * @param {T} route
- * @param {Partial<IApiRoutes[T]>} [fields]
- * @return {Promise<IApiRoutes[T][] | null>}
+ * @param {Partial<IApiRoutesData[T]>} [fields]
+ * @return {Promise<IApiRoutesData[T][] | null>}
  */
 export async function find(api, route, fields) {
   if (!api) return null
@@ -23,8 +23,8 @@ export async function find(api, route, fields) {
  * @template {ApiRoutes} T
  * @param {Api} api
  * @param {T} route
- * @param {IApiRoutes[T]['id']} id
- * @return {Promise<IApiRoutes[T] | null>}
+ * @param {IApiRoutesData[T]['id']} id
+ * @return {Promise<IApiRoutesData[T] | null>}
  */
 export async function findById(api, route, id) {
   if (!api) return null
@@ -38,7 +38,7 @@ export async function findById(api, route, id) {
  * @template {ApiRoutes} T
  * @param {Api} api
  * @param {T} route
- * @param {IApiRoutes[T]} fields
+ * @param {IApiRoutesData[T]} fields
  * @return {Promise<any | null>}
  */
 export async function create(api, route, fields) {
@@ -60,11 +60,11 @@ export class CommonRoute {
     this.route = route
   }
 
-  /** @param {Partial<IApiRoutes[T]>} fields */
+  /** @param {Partial<IApiRoutesData[T]>} fields */
   find(fields) { return find(this.api, this.route, fields) }
-  /** @param {IApiRoutes[T]['id']} id */
+  /** @param {IApiRoutesData[T]['id']} id */
   findById(id) { return findById(this.api, this.route, id) }
-  /** @param {IApiRoutes[T]} fields */
+  /** @param {IApiRoutesData[T]} fields */
   create(fields) { return create(this.api, this.route, fields) }
 }
 
